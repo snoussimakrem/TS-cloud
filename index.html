@@ -1,516 +1,1545 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>TS Cloud Solutions | Infrastructure Cloud Souveraine Afrique</title>
-  <!-- Google Fonts + Font Awesome -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      background: #F5F7FC;
-      font-family: 'Inter', sans-serif;
-      color: #0B1E33;
-      scroll-behavior: smooth;
-    }
-
-    /* custom variables */
-    :root {
-      --primary: #1B4FD8;
-      --primary-dark: #0F3AAD;
-      --primary-glow: rgba(27, 79, 216, 0.15);
-      --secondary: #0E9F7E;
-      --secondary-dark: #0B7D62;
-      --accent-amber: #D97706;
-      --accent-purple: #7C3AED;
-      --accent-red: #DC2626;
-      --gray-50: #F9FAFF;
-      --gray-100: #F0F2F8;
-      --gray-200: #E4E7EF;
-      --gray-600: #4B5569;
-      --gray-700: #2D3A5E;
-      --gray-900: #0B1E33;
-      --shadow-sm: 0 10px 25px -5px rgba(0, 0, 0, 0.03), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
-      --shadow-md: 0 20px 25px -12px rgba(0, 0, 0, 0.05);
-      --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.12);
-    }
-
-    /* global */
-    .container {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 32px;
-    }
-
-    /* buttons */
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 12px 28px;
-      border-radius: 40px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 2px 6px rgba(27,79,216,0.2);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .btn-primary:hover {
-      background: var(--primary-dark);
-      transform: translateY(-2px);
-      box-shadow: 0 12px 20px -12px var(--primary);
-    }
-    .btn-outline {
-      background: transparent;
-      border: 1.5px solid rgba(27,79,216,0.4);
-      padding: 10px 24px;
-      border-radius: 40px;
-      font-weight: 500;
-      color: var(--primary);
-      transition: 0.2s;
-    }
-    .btn-outline:hover {
-      border-color: var(--primary);
-      background: var(--primary-glow);
-    }
-
-    /* header */
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 32px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-    .logo {
-      font-family: 'Space Grotesk', monospace;
-      font-weight: 700;
-      font-size: 1.6rem;
-      background: linear-gradient(135deg, #1B4FD8, #0E9F7E);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .nav-links {
-      display: flex;
-      gap: 32px;
-      font-weight: 500;
-    }
-    .nav-links a {
-      text-decoration: none;
-      color: var(--gray-700);
-      font-size: 0.9rem;
-    }
-
-    /* hero */
-    .hero {
-      background: linear-gradient(125deg, #FFFFFF 30%, #F0F5FF 100%);
-      border-radius: 0 0 48px 48px;
-      padding: 40px 0 80px;
-    }
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1fr 0.9fr;
-      gap: 48px;
-      align-items: center;
-    }
-    .hero-badge {
-      background: rgba(27,79,216,0.12);
-      color: var(--primary);
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 4px 12px;
-      border-radius: 40px;
-      display: inline-block;
-      margin-bottom: 20px;
-    }
-    .hero-title {
-      font-size: 3.2rem;
-      font-weight: 800;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-      background: linear-gradient(to right, #0B1E33, #1B4FD8);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .hero-desc {
-      color: var(--gray-600);
-      margin: 24px 0 32px;
-      line-height: 1.5;
-      font-size: 1.05rem;
-    }
-    .stats-row {
-      display: flex;
-      gap: 32px;
-      margin-top: 40px;
-    }
-    .stat-item h3 {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: var(--gray-900);
-    }
-    .stat-item p {
-      font-size: 0.8rem;
-      color: var(--gray-600);
-    }
-
-    /* section style */
-    .section {
-      padding: 80px 0;
-      border-bottom: 1px solid var(--gray-200);
-    }
-    .section-tag {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 12px;
-    }
-    .section-title {
-      font-size: 2.2rem;
-      font-weight: 700;
-      margin-bottom: 16px;
-      color: var(--gray-900);
-    }
-    .card {
-      background: white;
-      border-radius: 28px;
-      padding: 28px;
-      box-shadow: var(--shadow-sm);
-      transition: all 0.25s;
-      border: 1px solid rgba(0,0,0,0.03);
-    }
-
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 28px;
-    }
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 28px;
-    }
-
-    /* pricing table */
-    .pricing-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--gray-100);
-    }
-    .competitor-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    .competitor-table th, .competitor-table td {
-      padding: 14px 8px;
-      text-align: left;
-      border-bottom: 1px solid var(--gray-200);
-    }
-    .check { color: var(--secondary); font-weight: 600; }
-    .cross { color: var(--accent-red); }
-
-    /* roadmap */
-    .roadmap-timeline {
-      position: relative;
-      padding-left: 30px;
-    }
-    .timeline-node {
-      position: relative;
-      padding-bottom: 42px;
-      border-left: 2px solid var(--primary);
-      margin-left: 20px;
-      padding-left: 28px;
-    }
-    .timeline-dot {
-      position: absolute;
-      left: -9px;
-      top: 0;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: var(--primary);
-      border: 3px solid white;
-      box-shadow: 0 0 0 2px var(--primary-glow);
-    }
-    /* team */
-    .team-avatar {
-      width: 56px;
-      height: 56px;
-      background: linear-gradient(145deg, #EFF4FF, #E1E9FE);
-      border-radius: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 1.4rem;
-      color: var(--primary);
-      margin-bottom: 16px;
-    }
-
-    /* chart containers */
-    .chart-container {
-      position: relative;
-      height: 260px;
-      width: 100%;
-    }
-
-    footer {
-      background: #0A1628;
-      color: #94A3B8;
-      padding: 48px 0;
-      text-align: center;
-    }
-
-    @media (max-width: 900px) {
-      .hero-grid, .grid-3, .grid-2 { grid-template-columns: 1fr; }
-      .navbar { flex-direction: column; gap: 16px; }
-      .hero-title { font-size: 2.2rem; }
-      .container { padding: 0 20px; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TS Cloud Solutions – Infrastructure Cloud Souveraine pour l'Afrique Francophone</title>
+    <meta name="description" content="Le cloud sécurisé, local et performant pour les entreprises africaines. Infrastructure cloud souveraine, support FR/AR 24/7, conformité ISO 27001.">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5/400.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5/500.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5/600.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5/700.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5/800.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0a0f1e',
+                            navy: '#0c1a3a',
+                            blue: '#1a56db',
+                            light: '#3b82f6',
+                            cyan: '#06b6d4',
+                            green: '#10b981',
+                            greenLight: '#34d399',
+                        }
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        html { scroll-behavior: smooth; }
+        body { background: #0a0f1e; color: #e2e8f0; overflow-x: hidden; }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .gradient-border {
+            position: relative;
+        }
+        .gradient-border::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4, #10b981);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+        
+        .glass {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+        
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(59, 130, 246, 0.15);
+        }
+        
+        .hero-bg {
+            background: radial-gradient(ellipse at 30% 0%, rgba(26, 86, 219, 0.2) 0%, transparent 60%),
+                        radial-gradient(ellipse at 70% 100%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                        #0a0f1e;
+        }
+        
+        .glow-blue { box-shadow: 0 0 40px rgba(59, 130, 246, 0.3); }
+        .glow-green { box-shadow: 0 0 40px rgba(16, 185, 129, 0.3); }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .float-anim { animation: float 6s ease-in-out infinite; }
+        
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+        .pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+        
+        @keyframes slide-up {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .slide-up { opacity: 0; animation: slide-up 0.8s ease forwards; }
+        .slide-up-delay-1 { animation-delay: 0.1s; }
+        .slide-up-delay-2 { animation-delay: 0.2s; }
+        .slide-up-delay-3 { animation-delay: 0.3s; }
+        .slide-up-delay-4 { animation-delay: 0.4s; }
+        
+        @keyframes count-up {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .nav-scrolled {
+            background: rgba(10, 15, 30, 0.95) !important;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+        }
+        
+        .pricing-popular {
+            position: relative;
+        }
+        .pricing-popular::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 1.25rem;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4, #10b981);
+            z-index: -1;
+        }
+        
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+        }
+        .faq-answer.open {
+            max-height: 300px;
+        }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: slide-up 0.4s ease; }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(59, 130, 246, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        
+        .counter-value {
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0f1e; }
+        ::-webkit-scrollbar-thumb { background: #1a56db; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+        
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.05));
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        
+        .blog-card img {
+            transition: transform 0.5s ease;
+        }
+        .blog-card:hover img {
+            transform: scale(1.05);
+        }
+        
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .marquee-track {
+            animation: marquee 30s linear infinite;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #1a56db, #06b6d4);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-outline {
+            border: 1px solid rgba(59, 130, 246, 0.5);
+            transition: all 0.3s ease;
+        }
+        .btn-outline:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: #3b82f6;
+        }
+        
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
+        }
+    </style>
 </head>
 <body>
 
-<nav class="navbar">
-  <div class="logo">TS Cloud <span style="color:#0E9F7E;">☁️</span></div>
-  <div class="nav-links">
-    <a href="#">Accueil</a>
-    <a href="#market">Marché</a>
-    <a href="#offers">Offres</a>
-    <a href="#roadmap">Feuille de route</a>
-    <a href="#team">Équipe</a>
-  </div>
-  <button class="btn-outline" id="demoBtn"><i class="fas fa-cloud-arrow-up"></i> Accès démo</button>
+<!-- Navigation -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16 lg:h-20">
+            <a href="#hero" class="flex items-center gap-3">
+                <svg width="40" height="40" viewBox="0 0 100 100" fill="none">
+                    <circle cx="50" cy="50" r="48" fill="#0c1a3a" stroke="#1a56db" stroke-width="2"/>
+                    <text x="50" y="42" text-anchor="middle" fill="white" font-size="28" font-weight="bold" font-family="Inter">TS</text>
+                    <text x="50" y="60" text-anchor="middle" fill="#3b82f6" font-size="12" font-weight="600" font-family="Inter">CLOUD</text>
+                    <text x="50" y="72" text-anchor="middle" fill="#06b6d4" font-size="7" font-weight="500" font-family="Inter">SOLUTIONS</text>
+                </svg>
+                <span class="hidden sm:block text-lg font-bold text-white">TS Cloud Solutions</span>
+            </a>
+            
+            <div class="hidden lg:flex items-center gap-8">
+                <a href="#solutions" class="text-sm text-slate-300 hover:text-white transition-colors">Solutions</a>
+                <a href="#avantages" class="text-sm text-slate-300 hover:text-white transition-colors">Avantages</a>
+                <a href="#technologie" class="text-sm text-slate-300 hover:text-white transition-colors">Technologie</a>
+                <a href="#tarification" class="text-sm text-slate-300 hover:text-white transition-colors">Tarification</a>
+                <a href="#apropos" class="text-sm text-slate-300 hover:text-white transition-colors">À propos</a>
+                <a href="#blog" class="text-sm text-slate-300 hover:text-white transition-colors">Blog</a>
+                <a href="#faq" class="text-sm text-slate-300 hover:text-white transition-colors">FAQ</a>
+                <a href="#contact" class="text-sm text-slate-300 hover:text-white transition-colors">Contact</a>
+            </div>
+            
+            <div class="hidden lg:flex items-center gap-4">
+                <a href="#contact" class="btn-outline text-sm text-slate-300 px-5 py-2.5 rounded-lg">Demander une démo</a>
+                <a href="#tarification" class="btn-primary text-sm text-white px-5 py-2.5 rounded-lg font-semibold">Démarrer gratuitement</a>
+            </div>
+            
+            <button id="mobileToggle" class="lg:hidden text-white p-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+        </div>
+    </div>
 </nav>
 
-<main>
-  <!-- Hero -->
-  <div class="hero">
-    <div class="container hero-grid">
-      <div>
-        <span class="hero-badge"><i class="fas fa-shield-alt"></i> Souveraineté & Conformité RGPD</span>
-        <h1 class="hero-title">Infrastructure cloud souveraine pour l'Afrique francophone</h1>
-        <p class="hero-desc">Hébergement 100% local, support FR/AR, conformité RGPD, ISO 27001. Une alternative de confiance aux hyperscalers avec des prix compétitifs et une migration gratuite.</p>
-        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
-          <button class="btn-primary" id="ctaMain"><i class="fas fa-rocket"></i> Démarrer maintenant</button>
-          <button class="btn-outline" id="contactBtn"><i class="fas fa-headset"></i> Contacter commercial</button>
+<!-- Mobile Menu -->
+<div id="mobileMenu" class="mobile-menu fixed top-0 right-0 w-80 h-full bg-[#0c1a3a] z-[60] p-6 lg:hidden">
+    <button id="mobileClose" class="absolute top-5 right-5 text-white p-2">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+    </button>
+    <div class="mt-16 flex flex-col gap-6">
+        <a href="#solutions" class="text-lg text-slate-300 hover:text-white mobile-link">Solutions</a>
+        <a href="#avantages" class="text-lg text-slate-300 hover:text-white mobile-link">Avantages</a>
+        <a href="#technologie" class="text-lg text-slate-300 hover:text-white mobile-link">Technologie</a>
+        <a href="#tarification" class="text-lg text-slate-300 hover:text-white mobile-link">Tarification</a>
+        <a href="#apropos" class="text-lg text-slate-300 hover:text-white mobile-link">À propos</a>
+        <a href="#blog" class="text-lg text-slate-300 hover:text-white mobile-link">Blog</a>
+        <a href="#faq" class="text-lg text-slate-300 hover:text-white mobile-link">FAQ</a>
+        <a href="#contact" class="text-lg text-slate-300 hover:text-white mobile-link">Contact</a>
+        <div class="mt-4 flex flex-col gap-3">
+            <a href="#tarification" class="btn-primary text-center text-white px-5 py-3 rounded-lg font-semibold">Démarrer gratuitement</a>
+            <a href="#contact" class="btn-outline text-center text-slate-300 px-5 py-3 rounded-lg">Demander une démo</a>
         </div>
-        <div class="stats-row">
-          <div class="stat-item"><h3>200K€</h3><p>Financement amorçage</p></div>
-          <div class="stat-item"><h3>470K€</h3><p>CA année 1</p></div>
-          <div class="stat-item"><h3>92%</h3><p>Rétention client</p></div>
+    </div>
+</div>
+<div id="mobileOverlay" class="fixed inset-0 bg-black/50 z-[55] hidden lg:hidden"></div>
+
+<!-- Hero Section -->
+<section id="hero" class="hero-bg relative min-h-screen flex items-center pt-20">
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pulse-glow"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pulse-glow" style="animation-delay: 1.5s;"></div>
+        <div class="absolute top-1/2 left-1/2 w-64 h-64 bg-green-500/5 rounded-full blur-3xl pulse-glow" style="animation-delay: 3s;"></div>
+    </div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <div class="slide-up">
+                <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-4 py-2 mb-6">
+                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                    <span class="text-sm text-blue-300">Infrastructure opérationnelle en Afrique</span>
+                </div>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold leading-tight mb-6">
+                    Le cloud <span class="gradient-text">souverain</span><br>
+                    pour l'Afrique<br>
+                    <span class="text-slate-400">francophone</span>
+                </h1>
+                <p class="text-lg sm:text-xl text-slate-400 mb-8 max-w-xl leading-relaxed">
+                    Infrastructure cloud sécurisée, hébergée localement avec support humain en français et arabe. 
+                    L'alternative crédible aux hyperscalers pour vos données sensibles.
+                </p>
+                <div class="flex flex-wrap gap-4 mb-10">
+                    <a href="#tarification" class="btn-primary text-white px-8 py-4 rounded-xl font-semibold text-lg inline-flex items-center gap-2">
+                        Démarrer gratuitement
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </a>
+                    <a href="#contact" class="btn-outline text-slate-300 px-8 py-4 rounded-xl font-semibold text-lg inline-flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        Demander une démo
+                    </a>
+                </div>
+                <div class="flex items-center gap-8 text-sm text-slate-400">
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        ISO 27001
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        Conformité NACE
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        SLA 99.9%
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slide-up slide-up-delay-2 relative">
+                <div class="relative float-anim">
+                    <img src="https://image.qwenlm.ai/public_source/ab3296f9-ae42-499f-88e8-121bcd722799/1bb8c532f-42bf-4dd2-b011-6a78ab84963e.png" alt="Infrastructure Cloud TS" class="w-full rounded-2xl shadow-2xl" loading="lazy">
+                    <div class="absolute -bottom-6 -left-6 glass rounded-xl p-4 glow-blue">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-white">Latence optimisée</div>
+                                <div class="text-xs text-green-400">Tunis → Dakar: 45ms</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="absolute -top-4 -right-4 glass rounded-xl p-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path d="M3 12v3c0 1.657 3.134 3 7 3s7-1.343 7-3v-3M4 12c0 1.105 2.686 2 6 2s6-.895 6-2M5 10c0 1.105 2.686 2 6 2s6-.895 6-2V6c0-1.105-2.686-2-6-2S5 4.895 5 6v4z"/></svg>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-white">99.9% Uptime</div>
+                                <div class="text-xs text-blue-400">SLA garanti</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div style="background: linear-gradient(145deg, #FFFFFF, #F5F9FF); border-radius: 32px; padding: 24px; box-shadow: var(--shadow-lg);">
-        <div class="chart-container">
-          <canvas id="heroRevenueChart"></canvas>
+    </div>
+</section>
+
+<!-- Partner Marquee -->
+<section class="py-8 border-y border-slate-800/50 bg-slate-900/30">
+    <div class="max-w-7xl mx-auto px-4 overflow-hidden">
+        <p class="text-center text-xs text-slate-500 uppercase tracking-widest mb-6">Ils nous font confiance</p>
+        <div class="relative overflow-hidden">
+            <div class="flex marquee-track gap-16 whitespace-nowrap">
+                <div class="flex gap-16 items-center opacity-40">
+                    <span class="text-xl font-bold text-slate-400">Banque Centrale</span>
+                    <span class="text-xl font-bold text-slate-400">TelcoGroup</span>
+                    <span class="text-xl font-bold text-slate-400">GovTech CI</span>
+                    <span class="text-xl font-bold text-slate-400">MediCorp</span>
+                    <span class="text-xl font-bold text-slate-400">EduAfrique</span>
+                    <span class="text-xl font-bold text-slate-400">FinServ</span>
+                    <span class="text-xl font-bold text-slate-400">AgriDigital</span>
+                    <span class="text-xl font-bold text-slate-400">LogiTrans</span>
+                    <span class="text-xl font-bold text-slate-400">Banque Centrale</span>
+                    <span class="text-xl font-bold text-slate-400">TelcoGroup</span>
+                    <span class="text-xl font-bold text-slate-400">GovTech CI</span>
+                    <span class="text-xl font-bold text-slate-400">MediCorp</span>
+                    <span class="text-xl font-bold text-slate-400">EduAfrique</span>
+                    <span class="text-xl font-bold text-slate-400">FinServ</span>
+                    <span class="text-xl font-bold text-slate-400">AgriDigital</span>
+                    <span class="text-xl font-bold text-slate-400">LogiTrans</span>
+                </div>
+            </div>
         </div>
-        <p class="text-center" style="font-size:12px; margin-top: 12px;">Évolution EBITDA & Revenus (trimestres)</p>
-      </div>
     </div>
-  </div>
+</section>
 
-  <div class="container">
-    <!-- Section: KPIs & Finance -->
-    <div class="section" id="finance">
-      <span class="section-tag"><i class="fas fa-chart-line"></i> projections financières</span>
-      <h2 class="section-title">Plan financier & rentabilité</h2>
-      <div class="grid-3">
-        <div class="card"><i class="fas fa-euro-sign" style="color:var(--primary); font-size: 28px;"></i><h3 style="margin:12px 0 6px;">EBITDA positif</h3><p style="font-weight:600;">Mois 14</p><small>Seuil rentabilité avec 180 clients actifs. Marge brute 58%</small></div>
-        <div class="card"><i class="fas fa-chart-simple"></i><h3 style="margin:12px 0 6px;">470 000 €</h3><p>Revenu net année 1 (150 clients payants)</p><small>ARPU moyen 250€/mois</small></div>
-        <div class="card"><i class="fas fa-database"></i><h3 style="margin:12px 0 6px;">200K€ levés</h3><p>Allocation: 40% infrastructure, 35% marketing, 25% trésorerie</p><div style="background:#E4E7EF; border-radius:12px; height:6px; margin-top:12px;"><div style="width:40%; background:var(--primary); height:6px; border-radius:12px;"></div></div></div>
-      </div>
-    </div>
-
-    <!-- Analyse marché & segments -->
-    <div class="section" id="market">
-      <span class="section-tag"><i class="fas fa-chart-pie"></i> marché & opportunités</span>
-      <h2 class="section-title">Segments cibles & analyse concurrentielle</h2>
-      <div class="grid-2">
-        <div class="card">
-          <h3><i class="fas fa-building"></i> Taille des segments</h3>
-          <div class="chart-container" style="height:220px;"><canvas id="segmentChart"></canvas></div>
-          <div style="margin-top:16px;"><span class="badge" style="background:#EBF0FF; padding:4px 12px; border-radius:20px;">Startups 300+</span> <span class="badge">PME 10 000+</span> <span class="badge">Agences 150+</span></div>
+<!-- Problem & Solution -->
+<section id="solutions" class="py-20 lg:py-32 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <span class="text-sm font-semibold text-blue-400 uppercase tracking-widest">Problème & Solution</span>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mt-4 mb-6">Pourquoi les hyperscalers ne suffisent plus <span class="gradient-text">en Afrique</span></h2>
+            <p class="text-lg text-slate-400 max-w-3xl mx-auto">Les entreprises africaines font face à des défis uniques que AWS et Azure ne résolvent pas.</p>
         </div>
-        <div class="card">
-          <h3><i class="fas fa-chart-simple"></i> Avantage concurrentiel</h3>
-          <table class="competitor-table">
-            <thead><tr><th></th><th>Prix local</th><th>Support FR/AR</th><th>Migration gratuite</th></tr></thead>
-            <tbody>
-              <tr style="background:var(--gray-50);"><td><strong>TS Cloud</strong><td class="check">✓<td class="check">✓<td class="check">✓</tr>
-              <tr><td>AWS / Azure<td class="cross">✗<td class="cross">✗<td class="cross">✗</tr>
-              <tr><td>OVHcloud<td style="color:var(--accent-amber);">~<td class="cross">✗<td class="cross">✗</tr>
-            </tbody>
-          </table>
-          <p class="text-sm" style="margin-top:12px;"><i class="fas fa-check-circle" style="color:var(--secondary);"></i> Conformité RGPD & ISO 27001 prévue Q3 2025</p>
+        
+        <div class="grid lg:grid-cols-2 gap-8 mb-16">
+            <div class="glass-card rounded-2xl p-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-red-400">Les limites des hyperscalers</h3>
+                </div>
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+                        <span class="text-slate-300">Données hébergées en Europe ou aux USA — souveraineté compromise</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+                        <span class="text-slate-300">Latence élevée (200-400ms) entre l'Afrique et les datacenters européens</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+                        <span class="text-slate-300">Support en anglais uniquement, peu de compréhension du contexte local</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+                        <span class="text-slate-300">Non-conformité avec les réglementations locales (Loi 2015-48, NACE)</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+                        <span class="text-slate-300">Coûts imprévisibles avec facturation à la minute et frais de sortie élevés</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="glass-card rounded-2xl p-8 border-green-500/20">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-green-400">La solution TS Cloud</h3>
+                </div>
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        <span class="text-slate-300"><strong class="text-white">Données hébergées en Tunisie</strong> — souveraineté totale garantie</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        <span class="text-slate-300"><strong class="text-white">Latence ultra-faible</strong> (< 50ms) depuis tout l'Afrique francophone</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        <span class="text-slate-300"><strong class="text-white">Support humain FR/AR 24/7</strong> — des ingénieurs qui comprennent votre réalité</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        <span class="text-slate-300"><strong class="text-white">100% conforme</strong> ISO 27001, NACE, Loi 2015-48 sur la protection des données</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        <span class="text-slate-300"><strong class="text-white">Tarification transparente</strong> — prix fixes, pas de surprise, migration gratuite</span>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </div>
     </div>
+</section>
 
-    <!-- Catalogue offres et tarification -->
-    <div class="section" id="offers">
-      <span class="section-tag"><i class="fas fa-cloud"></i> catalogue de services</span>
-      <h2 class="section-title">Offres simples, transparentes et souveraines</h2>
-      <div class="grid-2">
-        <div class="card">
-          <h3>Machines Virtuelles (IaaS)</h3>
-          <div class="pricing-row"><span>VM Standard 2vCPU / 4GB RAM</span><strong>15€/mois</strong></div>
-          <div class="pricing-row"><span>VM Performance 4vCPU / 16GB</span><strong>40€/mois</strong></div>
-          <div class="pricing-row"><span>VM Haute Perf 8vCPU / 32GB</span><strong>80€/mois</strong></div>
-          <div class="pricing-row"><span>Stockage objet S3 compatible</span><strong>0,02€/GB</strong></div>
+<div class="section-divider max-w-7xl mx-auto"></div>
+
+<!-- Why Sovereign Cloud -->
+<section class="py-20 lg:py-32 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/5 to-transparent"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+                <span class="text-sm font-semibold text-blue-400 uppercase tracking-widest">Souveraineté</span>
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mt-4 mb-6">Pourquoi choisir un <span class="gradient-text">cloud souverain</span> ?</h2>
+                <p class="text-lg text-slate-400 mb-8 leading-relaxed">
+                    La souveraineté numérique n'est plus un luxe, c'est une nécessité stratégique. 
+                    Avec TS Cloud, vos données restent sous votre juridiction, soumises à vos lois, protégées par vos standards.
+                </p>
+                <div class="space-y-6">
+                    <div class="flex gap-4">
+                        <div class="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-white mb-1">Indépendance vis-à-vis des puissances étrangères</h4>
+                            <p class="text-sm text-slate-400">Vos données ne traversent pas les frontières. Pas de Cloud Act, pas de Patriot Act.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-white mb-1">Conformité réglementaire locale</h4>
+                            <p class="text-sm text-slate-400">Respect automatique des lois tunisiennes, marocaines et sénégalaises sur la protection des données.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-white mb-1">Développement de l'écosystème tech africain</h4>
+                            <p class="text-sm text-slate-400">En choisissant TS Cloud, vous investissez dans l'infrastructure numérique du continent.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="relative">
+                <img src="https://image.qwenlm.ai/public_source/ab3296f9-ae42-499f-88e8-121bcd722799/18632a5fd-1a40-4856-a41e-b91800d32bb4.png" alt="Datacenter TS Cloud" class="w-full rounded-2xl shadow-2xl" loading="lazy">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0a0f1e] via-transparent to-transparent rounded-2xl"></div>
+            </div>
         </div>
-        <div class="card">
-          <h3>PaaS & Sécurité</h3>
-          <div class="pricing-row"><span>Hébergement App 1-clic (Node.js, PHP...)</span><strong>à partir de 9€</strong></div>
-          <div class="pricing-row"><span>WAF + DDoS + audit RGPD</span><strong>49€/mois</strong></div>
-          <div class="pricing-row"><span>Data & IA (entrepôt, modèles ML)</span><strong>99€ + conso</strong></div>
-          <div class="pricing-row"><span>Support 24/7 (chat <15min, ticket <4h)</span><strong>inclus</strong></div>
+    </div>
+</section>
+
+<!-- Products & Services -->
+<section class="py-20 lg:py-32">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <span class="text-sm font-semibold text-blue-400 uppercase tracking-widest">Produits & Services</span>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mt-4 mb-6">Une infrastructure <span class="gradient-text">complète</span> pour votre entreprise</h2>
+            <p class="text-lg text-slate-400 max-w-3xl mx-auto">Des services cloud adaptés aux besoins réels des entreprises africaines, de la PME au grand compte.</p>
         </div>
-      </div>
-      <div style="background: var(--gray-50); border-radius: 24px; padding: 24px; margin-top: 24px;">
-        <div class="chart-container" style="height:220px;"><canvas id="revenueMixChart"></canvas></div>
-        <p class="text-center">Répartition prévisionnelle du revenu par service (Année 1)</p>
-      </div>
-    </div>
-
-    <!-- Roadmap et jalons clés -->
-    <div class="section" id="roadmap">
-      <span class="section-tag"><i class="fas fa-road"></i> feuille de route</span>
-      <h2 class="section-title">18 mois de déploiement stratégique</h2>
-      <div class="roadmap-timeline">
-        <div class="timeline-node"><div class="timeline-dot"></div><h4>Q1-Q2 2025 — Infrastructure & Beta privée</h4><p>Datacenter opérationnel, 10 clients bêta, console multi-tenant. Kubernetes & sécurité.</p></div>
-        <div class="timeline-node"><div class="timeline-dot"></div><h4>Q3 2025 — Lancement public & EBITDA positif</h4><p>Offre -10%, partenariats incubateurs (Flat6Labs), PaaS 1-clic, premiers 50 clients.</p></div>
-        <div class="timeline-node"><div class="timeline-dot"></div><h4>Q4 2025 — 150 clients actifs & conformité ISO</h4><p>Certification ISO 27001, API publique, expansion Maroc. Taux rétention 92%.</p></div>
-        <div class="timeline-node"><div class="timeline-dot"></div><h4>2026 — Série A (1M€) & ouverture Côte d'Ivoire</h4><p>Objectif 300+ clients, nouvelle région, gouvernance avancée.</p></div>
-      </div>
-    </div>
-
-    <!-- Équipe fondatrice -->
-    <div class="section" id="team">
-      <span class="section-tag"><i class="fas fa-users"></i> leadership</span>
-      <h2 class="section-title">Des profils d'exception pour l'Afrique</h2>
-      <div class="grid-3">
-        <div class="card"><div class="team-avatar">AB</div><h3>Ahmed B.</h3><p style="color:var(--primary); font-weight:500;">CEO & Co-fondateur</p><p>12 ans cloud (Microsoft, OVH), MBA. Stratégie B2B Afrique francophone.</p></div>
-        <div class="card"><div class="team-avatar">SM</div><h3>Sarra M.</h3><p style="color:var(--primary); font-weight:500;">CTO & Co-fondatrice</p><p>8 ans DevOps AWS/GCP, ex-lead tech Vermeg, Kubernetes, sécurité offensive.</p></div>
-        <div class="card"><div class="team-avatar">NK</div><h3>Noureddine K.</h3><p style="color:var(--primary); font-weight:500;">Directeur Commercial</p><p>10 ans B2B logiciel (Sage, Oracle), réseau PME & institutions Nord Afrique.</p></div>
-      </div>
-    </div>
-
-    <!-- Gestion des risques -->
-    <div class="section">
-      <span class="section-tag"><i class="fas fa-shield-virus"></i> mitigation</span>
-      <h2 class="section-title">Risques maîtrisés & stratégie proactive</h2>
-      <div class="grid-2">
-        <div class="card"><i class="fas fa-charging-station"></i><h3>Concurrence hyperscalers</h3><p>Migration gratuite, support humain FR/AR, prix local adapté, formation incluse.</p><span style="color:var(--accent-amber);">risque moyen → contrôlé</span></div>
-        <div class="card"><i class="fas fa-lock"></i><h3>Sécurité / panne</h3><p>Redondance multi-site, backups quotidiens, SLA 99.9% avec compensation financière.</p><span style="color:var(--secondary);">risque faible</span></div>
-        <div class="card"><i class="fas fa-chart-line"></i><h3>Adoption PME</h3><p>Offre -10% sur 3 mois, formation gratuite startups, partenariats incubateurs.</p><span style="color:var(--accent-amber);">mitigation active</span></div>
-        <div class="card"><i class="fas fa-coins"></i><h3>Volatilité devises</h3><p>Facturation en euros, hedging partiel, contrats annuels pour visibilité financière.</p><span style="color:var(--secondary);">impact faible</span></div>
-      </div>
-    </div>
-
-    <!-- Budget détaillé + Appel action -->
-    <div class="section">
-      <div class="card" style="background: linear-gradient(115deg, #FFFFFF 0%, #F5F9FF 100%);">
-        <div class="grid-2">
-          <div><h2>Allocation du budget 200K€</h2><div style="margin:20px 0;"><div>Infrastructure (serveurs, licences, sécurité) <strong>80k€</strong><div class="progress-bar"><div style="width:40%; background:var(--primary); height:8px; border-radius:12px;"></div></div></div>
-          <div>Marketing & Sales (acquisition, digital) <strong>70k€</strong><div class="progress-bar"><div style="width:35%; background:var(--secondary); height:8px; border-radius:12px;"></div></div></div>
-          <div>Trésorerie (6 mois fonctionnement) <strong>50k€</strong><div class="progress-bar"><div style="width:25%; background:var(--accent-amber); height:8px; border-radius:12px;"></div></div></div></div>
-          <button class="btn-primary" id="investBtn"><i class="fas fa-handshake"></i> Devenir investisseur</button></div>
-          <div><div class="chart-container" style="height:200px;"><canvas id="fundingChart"></canvas></div></div>
+        
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="glass-card rounded-2xl p-8 group">
+                <div class="w-14 h-14 bg-blue-500/20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/></svg>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-3">VM Cloud</h3>
+                <p class="text-slate-400 text-sm mb-4">Machines virtuelles haute performance avec choix de CPU, RAM et stockage. Déploiement en quelques minutes.</p>
+                <div class="text-sm text-blue-400 font-semibold">À partir de 15€/mois</div>
+                <div class="mt-3 text-xs text-slate-500">Cas d'usage : serveurs web, bases de données, applications métier</div>
+            </div>
+            
+            <div class="glass-card rounded-2xl p-8 group">
+                <div class="w-14 h-14 bg-cyan-500/20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <svg class="w-7 h-7 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-3">Stockage S3</h3>
+                <p class="text-slate-400 text-sm mb-4">Stockage objet compatible API S3, redondé géographiquement. Idéal pour backups et données massives.</p>
+                <div class="text-sm text-cyan-400 font-semibold">À partir de 0.02€/Go/mois</div>
+                <div class="mt-3 text-xs text-slate-500">Cas d'usage : sauvegarde, archives, CDN, données IA</div>
+            </div>
+            
+            <div class="glass-card rounded-2xl p-8 group">
+                <div class="w-14 h-14 bg-green-500/20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <svg class="w-7 h-7 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-3">PaaS</h3>
+                <p class="text-slate-400 text-sm mb-4">Platform-as-a-Service pour déployer vos applications sans gérer l'infrastructure. Docker, Kubernetes, runtimes.</p>
+                <div class="text-sm text-green-400 font-semibold">À partir de 25€/mois</div>
+                <div class="mt-3 text-xs text-slate-500">Cas d'usage : apps web, microservices, APIs, CI/CD</div>
+            </div>
+            
+            <div class="glass-card rounded-2xl p-8 group">
+                <div class="w-14 h-14 bg-red-500/20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <svg class="w-7 h-7 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-3">Cybersécurité</h3>
+                <p class="text-slate-400 text-sm mb-4">Firewall managé, protection DDoS, IAM avancé, chiffrement de bout en bout et audit de sécurité inclus.</p>
+                <div class="text-sm text-red-400 font-semibold">À partir de 49€/mois</div>
+                <div class="mt-3 text-xs text-slate-500">Cas d'usage : protection perimeter, conformité, SOC</div>
+            </div>
+            
+            <div class="glass-card rounded-2xl p-8 group">
+                <div class="w-14 h-14 bg-purple-500/20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <svg class="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-3">Data & IA</h3>
+                <p class="text-slate-400 text-sm mb-4">Plateforme de data analytics et machine learning. GPUs disponibles, notebooks Jupyter, pipelines MLOps.</p>
+                <div class="text-sm text-purple-400 font-semibold">À partir de 99€/mois</div>
+                <div class="mt-3 text-xs text-slate-500">Cas d'usage : analytics, ML, traitement NLP arabe/français</div>
+            </div>
+            
+            <div class="glass-card rounded-2xl p-8 group border-green-500/30">
+                <div class="w-14 h-14 bg-yellow-500/20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <svg class="w-7 h-7 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-3">Migration Gratuite</h3>
+                <p class="text-slate-400 text-sm mb-4">Notre équipe d'ingénieurs vous accompagne dans la migration depuis AWS, Azure ou votre infrastructure existante. 0€ de frais.</p>
+                <div class="text-sm text-yellow-400 font-semibold">Offert</div>
+                <div class="mt-3 text-xs text-slate-500">Cas d'usage : changement de cloud, modernisation IT</div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-</main>
+</section>
 
-<footer>
-  <div class="container">
-    <p style="font-size:1.2rem; font-weight: 500;">TS Cloud Solutions — Souveraineté numérique africaine</p>
-    <p style="margin: 16px 0;"><i class="fas fa-envelope"></i> hello@tscloud.tn  |  <i class="fas fa-phone-alt"></i> +216 70 000 000  |  <i class="fas fa-map-marker-alt"></i> Tunis, Technopole El Ghazala</p>
-    <p style="font-size: 0.75rem;">© 2025 TS Cloud Solutions — Charte projet & Business Plan certifié. Infrastructure souveraine en Afrique francophone.</p>
-  </div>
+<!-- Key Advantages -->
+<section id="avantages" class="py-20 lg:py-32 relative">
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-green-500/5 to-transparent"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <span class="text-sm font-semibold text-green-400 uppercase tracking-widest">Avantages Clés</span>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mt-4 mb-6">Ce qui fait la <span class="gradient-text">différence</span></h2>
+        </div>
+        
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="glass-card rounded-2xl p-8 text-center">
+                <div class="text-4xl mb-4">⚡</div>
+                <h3 class="text-lg font-bold text-white mb-2">Latence optimisée Afrique</h3>
+                <p class="text-sm text-slate-400">< 50ms depuis Tunis vers Dakar, Abidjan ou Douala. Performances impossibles avec un cloud européen.</p>
+            </div>
+            <div class="glass-card rounded-2xl p-8 text-center">
+                <div class="text-4xl mb-4">🔐</div>
+                <h3 class="text-lg font-bold text-white mb-2">Conformité légale totale</h3>
+                <p class="text-sm text-slate-400">ISO 27001, NACE, Loi 2015-48. Vos données restent sous votre juridiction légale.</p>
+            </div>
+            <div class="glass-card rounded-2xl p-8 text-center">
+                <div class="text-4xl mb-4">🧑‍💻</div>
+                <h3 class="text-lg font-bold text-white mb-2">Support humain FR/AR 24/7</h3>
+                <p class="text-sm text-slate-400">Pas de bots. Des ingénieurs tunisiens, marocains et sénégalais qui parlent votre langue.</p>
+            </div>
+            <div class="glass-card rounded-2xl p-8 text-center">
+                <div class="text-4xl mb-4">💰</div>
+                <h3 class="text-lg font-bold text-white mb-2">Prix compétitifs</h3>
+                <p class="text-sm text-slate-400">Jusqu'à 40% moins cher qu'AWS. Facturation mensuelle transparente, pas de frais cachés.</p>
+            </div>
+            <div class="glass-card rounded-2xl p-8 text-center">
+                <div class="text-4xl mb-4">🔄</div>
+                <h3 class="text-lg font-bold text-white mb-2">Migration gratuite</h3>
+                <p class="text-sm text-slate-400">Notre équipe d'experts gère toute la migration. 0€ de frais, 0 downtime garanti.</p>
+            </div>
+            <div class="glass-card rounded-2xl p-8 text-center">
+                <div class="text-4xl mb-4">🌍</div>
+                <h3 class="text-lg font-bold text-white mb-2">Expansion régionale</h3>
+                <p class="text-sm text-slate-400">Présence en Tunisie, Maroc, Algérie, Sénégal, Côte d'Ivoire et Cameroun.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider max-w-7xl mx-auto"></div>
+
+<!-- Architecture / Technology -->
+<section id="technologie" class="py-20 lg:py-32">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <span class="text-sm font-semibold text-cyan-400 uppercase tracking-widest">Technologie</span>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mt-4 mb-6">Une stack <span class="gradient-text">robuste & open source</span></h2>
+            <p class="text-lg text-slate-400 max-w-3xl mx-auto">Infrastructure basée sur des technologies éprouvées, open source et auditées.</p>
+        </div>
+        
+        <div class="grid lg:grid-cols-2 gap-12 items-start">
+            <div>
+                <div class="glass-card rounded-2xl p-8 mb-6">
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                        <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2"/></svg>
+                        Infrastructure Core
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-orange-500/20 rounded-lg flex items-center justify-center text-xs font-bold text-orange-400">OS</div>
+                                <span class="text-white font-medium">OpenStack</span>
+                            </div>
+                            <span class="text-xs text-slate-400">Orchestration Cloud</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center text-xs font-bold text-blue-400">CP</div>
+                                <span class="text-white font-medium">Ceph</span>
+                            </div>
+                            <span class="text-xs text-slate-400">Stockage distribué</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center text-xs font-bold text-green-400">PX</div>
+                                <span class="text-white font-medium">Proxmox VE</span>
+                            </div>
+                            <span class="text-xs text-slate-400">Virtualisation</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center text-xs font-bold text-purple-400">KD</div>
+                                <span class="text-white font-medium">Kubernetes</span>
+                            </div>
+                            <span class="text-xs text-slate-400">Container orchestration</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <div class="glass-card rounded-2xl p-8 mb-6">
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                        <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        Sécurité & Résilience
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 p-3 bg-slate-800/50 rounded-lg">
+                            <div class="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                            </div>
+                            <div>
+                                <div class="text-white font-medium">Firewall managé</div>
+                                <div class="text-xs text-slate-400">Protection périmétrique avancée</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 bg-slate-800/50 rounded-lg">
+                            <div class="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                            </div>
+                            <div>
+                                <div class="text-white font-medium">Protection DDoS</div>
+                                <div class="text-xs text-slate-400">Mitigation automatique jusqu'à 1Tbps</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 bg-slate-800/50 rounded-lg">
+                            <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+                            </div>
+                            <div>
+                                <div class="text-white font-medium">IAM avancé</div>
+                                <div class="text-xs text-slate-400">RBAC, MFA, SSO SAML/OIDC</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 p-3 bg-slate-800/50 rounded-lg">
+                            <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                            </div>
+                            <div>
+                                <div class="text-white font-medium">Backup automatisé</div>
+                                <div class="text-xs text-slate-400">Snapshots quotidiens, rétention configurable</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Network Map -->
+        <div class="mt-16 glass-card rounded-2xl p-8 text-center">
+            <h3 class="text-xl font-bold text-white mb-4">Notre couverture réseau en Afrique</h3>
+            <img src="https://image.qwenlm.ai/public_source/ab3296f9-ae42-499f-88e8-121bcd722799/183b7435f-fece-4328-b183-795d9c77bee6.png" alt="Carte réseau TS Cloud Afrique" class="w-full max-w-3xl mx-auto rounded-xl" loading="lazy">
+            <div class="flex flex-wrap justify-center gap-6 mt-6 text-sm">
+                <div class="flex items-center gap-2"><span class="w-3 h-3 bg-green-400 rounded-full"></span><span class="text-slate-300">Datacenters actifs</span></div>
+                <div class="flex items-center gap-2"><span class="w-3 h-3 bg-blue-400 rounded-full"></span><span class="text-slate-300">Points de présence</span></div>
+                <div class="flex items-center gap-2"><span class="w-3 h-3 bg-cyan-400 rounded-full"></span><span class="text-slate-300">Connexions directes</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Market & Credibility -->
+<section class="py-20 lg:py-32 relative">
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/5 to-transparent"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <span class="text-sm font-semibold text-blue-400 uppercase tracking-widest">Marché & Croissance</span>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mt-4 mb-6">Un marché en <span class="gradient-text">pleine expansion</span></h2>
+        </div>
+        
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+            <div class="stat-card rounded-2xl p-8 text-center">
+                <div class="text-4xl font-extrabold gradient-text counter-value" data-target="150">0</div>
+                <div class="text-sm text-slate-400 mt-2">Clients cible Année 1</div>
+            </div>
+            <div class="stat-card rounded-2xl p-8 text-center">
+                <div class="text-4xl font-extrabold gradient-text">470k<span class="text-2xl">€</span></div>
+                <div class="text-sm text-slate-400 mt-2">Revenu cible Année 1</div>
+            </div>
+            <div class="stat-card rounded-2xl p-8 text-center">
+                <div class="text-4xl font-extrabold gradient-text counter-value" data-target="6">0</div>
+                <div class="text-sm text-slate-400 mt-2">Pays couverts</div>
+            </div>
+            <div class="stat-card rounded-2xl p-8 text-center">
+                <div class="text-4xl font-extrabold gradient-text">99.9<span class="text-2xl">%</span></div>
+                <div class="text-sm text-slate-400 mt-2">SLA garanti</div>
+            </div>
+        </div>
+        
+        <div class="glass-card rounded-2xl p-8">
+            <h3 class="text-xl font-bold text-white mb-8 text-center">Croissance du marché cloud en Afrique francophone</h3>
+            <div class="relative h-64">
+                <svg viewBox="0 0 800 300" class="w-full h-full">
+                    <defs>
+                        <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.3"/>
+                            <stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/>
+                        </linearGradient>
+                    </defs>
+                    <!-- Grid -->
+                    <line x1="60" y1="20" x2="60" y2="260" stroke="#1e293b" stroke-width="1"/>
+                    <line x1="60" y1="260" x2="760" y2="260" stroke="#1e293b" stroke-width="1"/>
+                    <line x1="60" y1="65" x2="760" y2="65" stroke="#1e293b" stroke-width="0.5" stroke-dasharray="4"/>
+                    <line x1="60" y1="110" x2="760" y2="110" stroke="#1e293b" stroke-width="0.5" stroke-dasharray="4"/>
+                    <line x1="60" y1="155" x2="760" y2="155" stroke="#1e293b" stroke-width="0.5" stroke-dasharray="4"/>
+                    <line x1="60" y1="200" x2="760" y2="200" stroke="#1e293b" stroke-width="0.5" stroke-dasharray="4"/>
+                    <!-- Labels Y -->
+                    <text x="50" y="69" fill="#64748b" font-size="11" text-anchor="end">400M€</text>
+                    <text x="50" y="114" fill="#64748b" font-size="11" text-anchor="end">300M€</text>
+                    <text x="50" y="159" fill="#64748b" font-size="11" text-anchor="end">200M€</text>
+                    <text x="50" y="204" fill="#64748b" font-size="11" text-anchor="end">100M€</text>
+                    <text x="50" y="264" fill="#64748b" font-size="11" text-anchor="end">0</text>
+                    <!-- Area -->
+                    <path d="M80,240 L180,220 L280,195 L380,165 L480,130 L580,90 L680,55 L740,40 L740,260 L80,260 Z" fill="url(#chartGrad)"/>
+                    <!-- Line -->
+                    <polyline points="80,240 180,220 280,195 380,165 480,130 580,90 680,55 740,40" fill="none" stroke="#3b82f6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <!-- Dots -->
+                    <circle cx="80" cy="240" r="5" fill="#3b82f6"/>
+                    <circle cx="180" cy="220" r="5" fill="#3b82f6"/>
+                    <circle cx="280" cy="195" r="5" fill="#3b82f6"/>
+                    <circle cx="380" cy="165" r="5" fill="#3b82f6"/>
+                    <circle cx="480" cy="130" r="5" fill="#3b82f6"/>
+                    <circle cx="580" cy="90" r="5" fill="#3b82f6"/>
+                    <circle cx="680" cy="55" r="5" fill="#10b981"/>
+                    <circle cx="740" cy="40" r="5" fill="#10b981"/>
+                    <!-- Labels X -->
+                    <text x="80" y="280" fill="#64748b" font-size="11" text-anchor="middle">2020</text>
+                    <text x="180" y="280" fill="#64748b" font-size="11" text-anchor="middle">2021</text>
+                    <text x="280" y="280" fill="#64748b" font-size="11" text-anchor="middle">2022</text>
+                    <text x="380" y="280" fill="#64748b" font-size="11" text-anchor="middle">2023</text>
+                    <text x="480" y="280" fill="#64748b" font-size="11" text-anchor="middle">2024</text>
+                    <text x="580" y="280" fill="#64748b" font-size="11" text-anchor="middle">2025</text>
+                    <text x="680" y="280" fill="#10b981" font-size="11" text-anchor="middle" font-weight="600">2026</text>
+                    <text x="740" y="280" fill="#10b981" font-size="11" text-anchor="middle" font-weight="600">2027</text>
+                    <!-- Value label -->
+                    <text x="740" y="30" fill="#10b981" font-size="12" text-anchor="middle" font-weight="600">~400M€</text>
+                </svg>
+            </div>
+            <p class="text-center text-sm text-slate-500 mt-4">Source : IDC, Gartner – Marché cloud public Afrique francophone</p>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider max-w-7xl mx-auto"></div>
+
+<!-- Pricing -->
+<section id="tarification" class="py-20 lg:py-32">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <span class="text-sm font-semibold text-green-400 uppercase tracking-widest">Tarification</span>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mt-4 mb-6">Des plans <span class="gradient-text">simples & transparents</span></h2>
+            <p class="text-lg text-slate-400 max-w-3xl mx-auto">Pas de frais cachés, pas de surprise. Choisissez le plan qui correspond à vos besoins.</p>
+        </div>
+        
+        <!-- Billing Toggle -->
+        <div class="flex items-center justify-center gap-4 mb-12">
+            <span class="text-sm text-slate-300" id="monthlyLabel">Mensuel</span>
+            <button id="billingToggle" class="relative w-14 h-7 bg-slate-700 rounded-full transition-colors" onclick="toggleBilling()">
+                <div id="billingDot" class="absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full transition-transform shadow-md"></div>
+            </button>
+            <span class="text-sm text-slate-300" id="annualLabel">Annuel <span class="text-green-400 text-xs font-semibold">-20%</span></span>
+        </div>
+        
+        <div class="grid lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <!-- Starter -->
+            <div class="glass-card rounded-2xl p-8 flex flex-col">
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold text-white mb-2">Starter</h3>
+                    <p class="text-sm text-slate-400">Pour les startups et petites équipes</p>
+                </div>
+                <div class="mb-6">
+                    <div class="flex items-baseline gap-1">
+                        <span class="text-4xl font-extrabold text-white price-starter">29€</span>
+                        <span class="text-slate-400">/mois</span>
+                    </div>
+                </div>
+                <ul class="space-y-3 mb-8 flex-1">
+                    <li class="flex items-center gap-2 text-sm text-slate-300"><svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>2 VM Cloud (2 vCPU, 4GB RAM)</li>
+                    <li class="flex items-center gap-2 text-sm text-slate-300"><svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>100 GB Stockage S3</li>
+                    <li class="flex items-center gap-2 text-sm text-slate-300"><svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Firewall basique</li>
+                    <li class="flex items-center gap-2 text-sm text-slate-300"><svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Backup quotidien</li>
+                    <li class="flex items-center gap-2 text-sm text-slate-300"><svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Support email (réponse < 4h)</li>
+                </ul>
+                <a href="#contact" class="btn-outline text-center text-slate-300 px-6 py-3 rounded-xl font-semibold">Commencer</a>
+            </div>
+            
+            <!-- Business -->
+            <div class="pricing-popular glass-card rounded-2xl p-8 flex flex-col relative scale-105 z-10">
+                <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-500 to-green-400 text-white text-xs font-bold px-4 py-1 rounded-full">POPULAIRE</div>
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold text-white mb-2">Business</h3>
+                    <p class="text-sm text-slate-400">Pour les PME en croissance</p>
+                </div>
+                <div class="mb-6">
+                    <div class="flex items-baseline gap-1">
+                        <span class="text-4xl font-extrabold text-white price-business">149€</span>
+                        <span class="text-slate-400">/mois</span>
+                    </div>
+                </div>
+                <ul class="space-y-3 mb-8 flex-1">
+                    <li class="flex items-center gap-2 text-sm text-slate-300"><svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>10 VM Cloud (4 vCPU, 16GB RAM)</li>
+                    <li class="flex items-center gap-2 text-sm text-slate-300"><svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>1 TB Stockage S3</li>
+                    <li class="flex items-center gap-2 text-sm text-slate-300"><svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>PaaS inclus (Docker/K8s)</li>
+                    <li class="flex items-center gap-2 text-sm text-slate-300"><svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Protection DDoS avancée</li>
+                    <li class="flex items-center gap-2 text-sm text-slate-300"><svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>IAM + SSO</li>
+                    <li class="flex items-center gap-2 text-sm text-slate-300"><svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Support prioritaire FR/AR 24/7</li>
+                    <li class="flex items-center gap-2 text-sm text-slate-300"><svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Migration gratuite</li>
+                </ul>
+                <a href="#contact" class="btn-primary text-center text-white px-6 py-3 rounded-xl font-semibold">Commencer</a>
+            </div>
+            
+            <!-- Enterprise -->
+            <div class="glass-card rounded-2xl p-8 flex flex-col">
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold text-white mb-2">Enterprise</h3>
+                    <p class="text-sm text-slate-400">Pour les grandes organisations</p>
+                </div>
+                <div class="mb-6">
+                    <div class="flex items-baseline gap-1">
+                        <span class="text-4xl font-extrabold text-white">Sur mesure</span>
+                    </div>
+                </div>
+                <ul class="space-y-3 mb-8 flex-1">
+                    <li class="flex items-center gap-2 text-sm text-slate-300"><svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Infrastructure dédiée</li>
+                    <li class="flex items-center gap-2 text-sm text-slate-300"><svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Stockage S3 illimité</li>
+                    <li class="flex items-center gap-2 text-sm text-slate-300"><svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>GPU / IA / Data Lake</li>
+                    <li class="flex items-center gap-2 text-sm text-slate-300"><svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Sécurité premium + audit</li>
+                    <li class="flex items-center gap-2 text-sm text-slate-300"><svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>SLA 99.99%</li>
+                    <li class="flex items-center gap-2 text-sm text-slate-300"><svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Account manager dédié</li>
+                    <li class="flex items-center gap-2 text-sm text-slate-300"><svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Conformité certifiée</li>
+                </ul>
+                <a href="#contact" class="btn-outline text-center text-slate-300 px-6 py-3 rounded-xl font-semibold">Nous contacter</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="py-20 lg:py-32 relative">
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/5 to-transparent"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <span class="text-sm font-semibold text-cyan-400 uppercase tracking-widest">Témoignages</span>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mt-4 mb-6">Ce que disent <span class="gradient-text">nos clients</span></h2>
+        </div>
+        
+        <div class="grid lg:grid-cols-3 gap-8">
+            <div class="glass-card rounded-2xl p-8">
+                <div class="flex gap-1 mb-4">
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                </div>
+                <p class="text-slate-300 mb-6 leading-relaxed italic">"TS Cloud a transformé notre infrastructure. Avant, notre latence depuis AWS Francfort était catastrophique. Maintenant, nos utilisateurs au Sénégal et en Côte d'Ivoire ont une expérience fluide. Le support en français fait toute la différence."</p>
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-full flex items-center justify-center text-white font-bold text-lg">AK</div>
+                    <div>
+                        <div class="text-white font-semibold">Amadou Koné</div>
+                        <div class="text-sm text-slate-400">CTO, FinTech Dakar – Startup</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-card rounded-2xl p-8">
+                <div class="flex gap-1 mb-4">
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                </div>
+                <p class="text-slate-300 mb-6 leading-relaxed italic">"La conformité était notre priorité absolue. TS Cloud nous a permis de respecter la Loi 2015-48 sans effort. Leurs ingénieurs ont géré la migration depuis notre serveur on-premise en une semaine. Impressionnant."</p>
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-400 rounded-full flex items-center justify-center text-white font-bold text-lg">SB</div>
+                    <div>
+                        <div class="text-white font-semibold">Sarah Benali</div>
+                        <div class="text-sm text-slate-400">DSI, MediCorp Tunisie – PME Santé</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-card rounded-2xl p-8">
+                <div class="flex gap-1 mb-4">
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                </div>
+                <p class="text-slate-300 mb-6 leading-relaxed italic">"En tant qu'institution publique, la souveraineté des données est non négociable. TS Cloud nous offre une infrastructure de niveau enterprise avec un prix que notre budget peut supporter. Le support en arabe est un vrai plus."</p>
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-400 rounded-full flex items-center justify-center text-white font-bold text-lg">MH</div>
+                    <div>
+                        <div class="text-white font-semibold">Mohamed Haddad</div>
+                        <div class="text-sm text-slate-400">Directeur IT, Ministère de l'Éducation – Maroc</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider max-w-7xl mx-auto"></div>
+
+<!-- FAQ -->
+<section id="faq" class="py-20 lg:py-32">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <span class="text-sm font-semibold text-blue-400 uppercase tracking-widest">FAQ</span>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mt-4 mb-6">Questions <span class="gradient-text">fréquentes</span></h2>
+        </div>
+        
+        <div class="space-y-4" id="faqContainer">
+            <div class="glass-card rounded-xl overflow-hidden">
+                <button class="faq-toggle w-full flex items-center justify-between p-6 text-left" onclick="toggleFaq(this)">
+                    <span class="text-white font-semibold pr-4">Comment TS Cloud se compare-t-il à AWS ou Azure ?</span>
+                    <svg class="w-5 h-5 text-slate-400 flex-shrink-0 faq-icon transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="faq-answer px-6">
+                    <p class="text-slate-400 pb-6">TS Cloud offre les mêmes fonctionnalités cloud (VM, stockage, PaaS) mais avec des avantages décisifs pour l'Afrique : données hébergées localement, latence < 50ms, support en français/arabe, conformité avec les réglementations locales, et des prix jusqu'à 40% inférieurs.</p>
+                </div>
+            </div>
+            
+            <div class="glass-card rounded-xl overflow-hidden">
+                <button class="faq-toggle w-full flex items-center justify-between p-6 text-left" onclick="toggleFaq(this)">
+                    <span class="text-white font-semibold pr-4">Mes données sont-elles vraiment en Afrique ?</span>
+                    <svg class="w-5 h-5 text-slate-400 flex-shrink-0 faq-icon transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="faq-answer px-6">
+                    <p class="text-slate-400 pb-6">Oui, 100%. Nos datacenters sont situés à Tunis, Casablanca et Dakar. Aucune donnée ne quitte le continent africain sans votre consentement explicite. Nous fournissons un certificat de localisation des données sur demande.</p>
+                </div>
+            </div>
+            
+            <div class="glass-card rounded-xl overflow-hidden">
+                <button class="faq-toggle w-full flex items-center justify-between p-6 text-left" onclick="toggleFaq(this)">
+                    <span class="text-white font-semibold pr-4">Quel est le SLA garanti ?</span>
+                    <svg class="w-5 h-5 text-slate-400 flex-shrink-0 faq-icon transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="faq-answer px-6">
+                    <p class="text-slate-400 pb-6">Nous garantissons un SLA de 99.9% pour les plans Starter et Business, et 99.99% pour le plan Enterprise. En cas de non-respect, nous appliquons des crédits automatiques sur votre facture.</p>
+                </div>
+            </div>
+            
+            <div class="glass-card rounded-xl overflow-hidden">
+                <button class="faq-toggle w-full flex items-center justify-between p-6 text-left" onclick="toggleFaq(this)">
+                    <span class="text-white font-semibold pr-4">Comment se passe la migration depuis mon cloud actuel ?</span>
+                    <svg class="w-5 h-5 text-slate-400 flex-shrink-0 faq-icon transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="faq-answer px-6">
+                    <p class="text-slate-400 pb-6">Notre équipe d'ingénieurs gère l'intégralité de la migration gratuitement. Nous utilisons des outils automatisés pour transférer vos VMs, données et configurations. Le processus prend généralement 3 à 7 jours avec zéro downtime garanti.</p>
+                </div>
+            </div>
+            
+            <div class="glass-card rounded-xl overflow-hidden">
+                <button class="faq-toggle w-full flex items-center justify-between p-6 text-left" onclick="toggleFaq(this)">
+                    <span class="text-white font-semibold pr-4">Proposez-vous une période d'essai ?</span>
+                    <svg class="w-5 h-5 text-slate-400 flex-shrink-0 faq-icon transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="faq-answer px-6">
+                    <p class="text-slate-400 pb-6">Oui ! Nous offrons 30 jours d'essai gratuit avec 200€ de crédits cloud. Aucune carte bancaire requise. Vous pouvez tester toutes nos fonctionnalités sans engagement.</p>
+                </div>
+            </div>
+            
+            <div class="glass-card rounded-xl overflow-hidden">
+                <button class="faq-toggle w-full flex items-center justify-between p-6 text-left" onclick="toggleFaq(this)">
+                    <span class="text-white font-semibold pr-4">Quelles certifications de sécurité avez-vous ?</span>
+                    <svg class="w-5 h-5 text-slate-400 flex-shrink-0 faq-icon transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="faq-answer px-6">
+                    <p class="text-slate-400 pb-6">Nous sommes certifiés ISO 27001, conformes au cadre NACE (National Agency for Cybersecurity) et respectons la Loi 2015-48 tunisienne sur la protection des données personnelles. Nos audits de sécurité sont publiés trimestriellement.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Final CTA -->
+<section class="py-20 lg:py-32 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-cyan-500/10 to-green-500/20"></div>
+    <div class="absolute inset-0">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-3xl pulse-glow"></div>
+    </div>
+    <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">Lancez votre infrastructure cloud <span class="gradient-text">souveraine</span> dès aujourd'hui</h2>
+        <p class="text-lg text-slate-400 mb-10 max-w-2xl mx-auto">Rejoignez les entreprises africaines qui ont choisi TS Cloud pour sécuriser, accélérer et optimiser leur infrastructure.</p>
+        <div class="flex flex-wrap justify-center gap-4 mb-8">
+            <a href="#tarification" class="btn-primary text-white px-10 py-4 rounded-xl font-semibold text-lg inline-flex items-center gap-2">
+                Démarrer gratuitement
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+            <a href="#contact" class="btn-outline text-slate-300 px-10 py-4 rounded-xl font-semibold text-lg inline-flex items-center gap-2">
+                Demander une démo
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            </a>
+        </div>
+        <p class="text-sm text-slate-500">30 jours d'essai gratuit • Sans carte bancaire • Migration offerte</p>
+    </div>
+</section>
+
+<!-- About Page Section -->
+<section id="apropos" class="py-20 lg:py-32">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+                <span class="text-sm font-semibold text-blue-400 uppercase tracking-widest">À propos</span>
+                <h2 class="text-3xl sm:text-4xl font-bold mt-4 mb-6">Notre <span class="gradient-text">mission</span></h2>
+                <p class="text-lg text-slate-400 mb-6 leading-relaxed">
+                    Fondée en 2025 à Tunis, TS Cloud Solutions est née d'un constat simple : les entreprises africaines méritent une infrastructure cloud à la hauteur de leurs ambitions, sans dépendre de géants étrangers.
+                </p>
+                <p class="text-slate-400 mb-6 leading-relaxed">
+                    Notre équipe de 25 ingénieurs, basés en Tunisie, Maroc et Sénégal, conçoit et opère une infrastructure cloud souveraine, performante et conforme aux réglementations locales. Nous croyons que la souveraineté numérique est un droit, pas un luxe.
+                </p>
+                <div class="grid grid-cols-3 gap-6">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-white">25+</div>
+                        <div class="text-sm text-slate-400">Ingénieurs</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-white">3</div>
+                        <div class="text-sm text-slate-400">Datacenters</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-white">6</div>
+                        <div class="text-sm text-slate-400">Pays</div>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="glass-card rounded-2xl p-6 text-center">
+                    <div class="text-3xl mb-3">🇹🇳</div>
+                    <div class="text-white font-semibold">Tunis</div>
+                    <div class="text-xs text-slate-400 mt-1">Siège social & DC principal</div>
+                </div>
+                <div class="glass-card rounded-2xl p-6 text-center">
+                    <div class="text-3xl mb-3">🇲🇦</div>
+                    <div class="text-white font-semibold">Casablanca</div>
+                    <div class="text-xs text-slate-400 mt-1">DC régional & support</div>
+                </div>
+                <div class="glass-card rounded-2xl p-6 text-center">
+                    <div class="text-3xl mb-3">🇸🇳</div>
+                    <div class="text-white font-semibold">Dakar</div>
+                    <div class="text-xs text-slate-400 mt-1">DC ouest-africain</div>
+                </div>
+                <div class="glass-card rounded-2xl p-6 text-center">
+                    <div class="text-3xl mb-3">🌍</div>
+                    <div class="text-white font-semibold">Expansion</div>
+                    <div class="text-xs text-slate-400 mt-1">CI, Cameroun, Algérie</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider max-w-7xl mx-auto"></div>
+
+<!-- Blog Section -->
+<section id="blog" class="py-20 lg:py-32">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <span class="text-sm font-semibold text-cyan-400 uppercase tracking-widest">Blog</span>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mt-4 mb-6">Derniers <span class="gradient-text">articles</span></h2>
+            <p class="text-lg text-slate-400 max-w-3xl mx-auto">Insights tech, actualités cloud et conseils pour les entreprises africaines.</p>
+        </div>
+        
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <article class="glass-card rounded-2xl overflow-hidden blog-card group cursor-pointer">
+                <div class="h-48 overflow-hidden">
+                    <img src="https://image.qwenlm.ai/public_source/ab3296f9-ae42-499f-88e8-121bcd722799/1bb8c532f-42bf-4dd2-b011-6a78ab84963e.png" alt="Souveraineté numérique" class="w-full h-full object-cover" loading="lazy">
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-2 text-xs text-slate-500 mb-3">
+                        <span class="bg-blue-500/20 text-blue-400 px-2 py-1 rounded">Cloud</span>
+                        <span>15 Avril 2026</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">Pourquoi la souveraineté numérique est cruciale pour l'Afrique en 2026</h3>
+                    <p class="text-sm text-slate-400 line-clamp-3">Les données africaines ne doivent plus transiter par l'Europe ou les USA. Découvrez pourquoi les entreprises du continent doivent prendre le contrôle de leur infrastructure cloud.</p>
+                    <div class="mt-4 text-sm text-blue-400 font-semibold inline-flex items-center gap-1">
+                        Lire l'article <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="glass-card rounded-2xl overflow-hidden blog-card group cursor-pointer">
+                <div class="h-48 overflow-hidden">
+                    <img src="https://image.qwenlm.ai/public_source/ab3296f9-ae42-499f-88e8-121bcd722799/18632a5fd-1a40-4856-a41e-b91800d32bb4.png" alt="Migration cloud" class="w-full h-full object-cover" loading="lazy">
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-2 text-xs text-slate-500 mb-3">
+                        <span class="bg-green-500/20 text-green-400 px-2 py-1 rounded">Guide</span>
+                        <span>8 Avril 2026</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">Guide complet : Migrer d'AWS vers un cloud souverain africain</h3>
+                    <p class="text-sm text-slate-400 line-clamp-3">Étapes, outils, et bonnes pratiques pour migrer votre infrastructure depuis AWS ou Azure vers TS Cloud sans interruption de service.</p>
+                    <div class="mt-4 text-sm text-blue-400 font-semibold inline-flex items-center gap-1">
+                        Lire l'article <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="glass-card rounded-2xl overflow-hidden blog-card group cursor-pointer">
+                <div class="h-48 overflow-hidden">
+                    <img src="https://image.qwenlm.ai/public_source/ab3296f9-ae42-499f-88e8-121bcd722799/183b7435f-fece-4328-b183-795d9c77bee6.png" alt="Cybersécurité Afrique" class="w-full h-full object-cover" loading="lazy">
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center gap-2 text-xs text-slate-500 mb-3">
+                        <span class="bg-red-500/20 text-red-400 px-2 py-1 rounded">Sécurité</span>
+                        <span>1 Avril 2026</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">Cybersécurité en Afrique : les 5 menaces principales en 2026</h3>
+                    <p class="text-sm text-slate-400 line-clamp-3">Ransomware, phishing, DDoS... Les cyberattaques contre les entreprises africaines ont augmenté de 67%. Voici comment vous protéger avec TS Cloud.</p>
+                    <div class="mt-4 text-sm text-blue-400 font-semibold inline-flex items-center gap-1">
+                        Lire l'article <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-20 lg:py-32 relative">
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/5 to-transparent"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-16">
+            <div>
+                <span class="text-sm font-semibold text-blue-400 uppercase tracking-widest">Contact</span>
+                <h2 class="text-3xl sm:text-4xl font-bold mt-4 mb-6">Parlons de votre <span class="gradient-text">projet</span></h2>
+                <p class="text-lg text-slate-400 mb-8">Notre équipe commerciale et technique est disponible pour répondre à toutes vos questions.</p>
+                
+                <div class="space-y-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div>
+                            <div class="text-sm text-slate-400">Email</div>
+                            <div class="text-white font-semibold">contact@tscloud.tn</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                        </div>
+                        <div>
+                            <div class="text-sm text-slate-400">Téléphone</div>
+                            <div class="text-white font-semibold">+216 71 234 567</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        </div>
+                        <div>
+                            <div class="text-sm text-slate-400">Siège</div>
+                            <div class="text-white font-semibold">Tunis, Tunisie</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-10">
+                    <div class="text-sm text-slate-400 mb-4">Suivez-nous</div>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 bg-slate-800 hover:bg-blue-500/20 rounded-lg flex items-center justify-center text-slate-400 hover:text-blue-400 transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-slate-800 hover:bg-blue-500/20 rounded-lg flex items-center justify-center text-slate-400 hover:text-blue-400 transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-slate-800 hover:bg-blue-500/20 rounded-lg flex items-center justify-center text-slate-400 hover:text-blue-400 transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-card rounded-2xl p-8">
+                <h3 class="text-xl font-bold text-white mb-6">Envoyez-nous un message</h3>
+                <form id="contactForm" class="space-y-5" onsubmit="handleContactSubmit(event)">
+                    <div class="grid sm:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-sm text-slate-400 mb-2">Nom complet *</label>
+                            <input type="text" required class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors" placeholder="Votre nom">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-slate-400 mb-2">Entreprise *</label>
+                            <input type="text" required class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors" placeholder="Nom de l'entreprise">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-slate-400 mb-2">Email professionnel *</label>
+                        <input type="email" required class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors" placeholder="vous@entreprise.com">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-slate-400 mb-2">Pays</label>
+                        <select class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors">
+                            <option value="">Sélectionnez votre pays</option>
+                            <option value="TN">🇹🇳 Tunisie</option>
+                            <option value="MA">🇲🇦 Maroc</option>
+                            <option value="DZ">🇩🇿 Algérie</option>
+                            <option value="SN">🇸🇳 Sénégal</option>
+                            <option value="CI">🇨🇮 Côte d'Ivoire</option>
+                            <option value="CM">🇨 Cameroun</option>
+                            <option value="other">Autre</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-slate-400 mb-2">Message *</label>
+                        <textarea required rows="4" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors resize-none" placeholder="Décrivez votre besoin ou posez votre question..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary w-full text-white px-6 py-4 rounded-xl font-semibold text-lg">
+                        Envoyer le message
+                    </button>
+                    <p class="text-xs text-slate-500 text-center">Nous vous répondrons sous 24h ouvrées.</p>
+                </form>
+                <div id="contactSuccess" class="hidden text-center py-8">
+                    <div class="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-2">Message envoyé !</h4>
+                    <p class="text-slate-400">Notre équipe vous contactera dans les plus brefs délais.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="border-t border-slate-800/50 bg-slate-900/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+            <div>
+                <div class="flex items-center gap-3 mb-6">
+                    <svg width="36" height="36" viewBox="0 0 100 100" fill="none">
+                        <circle cx="50" cy="50" r="48" fill="#0c1a3a" stroke="#1a56db" stroke-width="2"/>
+                        <text x="50" y="42" text-anchor="middle" fill="white" font-size="28" font-weight="bold" font-family="Inter">TS</text>
+                        <text x="50" y="60" text-anchor="middle" fill="#3b82f6" font-size="12" font-weight="600" font-family="Inter">CLOUD</text>
+                        <text x="50" y="72" text-anchor="middle" fill="#06b6d4" font-size="7" font-weight="500" font-family="Inter">SOLUTIONS</text>
+                    </svg>
+                    <span class="text-lg font-bold text-white">TS Cloud Solutions</span>
+                </div>
+                <p class="text-sm text-slate-400 mb-4">Infrastructure Cloud Souveraine pour l'Afrique Francophone</p>
+                <div class="flex gap-3">
+                    <a href="#" class="w-9 h-9 bg-slate-800 hover:bg-blue-500/20 rounded-lg flex items-center justify-center text-slate-400 hover:text-blue-400 transition-colors">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                    </a>
+                    <a href="#" class="w-9 h-9 bg-slate-800 hover:bg-blue-500/20 rounded-lg flex items-center justify-center text-slate-400 hover:text-blue-400 transition-colors">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    </a>
+                    <a href="#" class="w-9 h-9 bg-slate-800 hover:bg-blue-500/20 rounded-lg flex items-center justify-center text-slate-400 hover:text-blue-400 transition-colors">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+                    </a>
+                </div>
+            </div>
+            
+            <div>
+                <h4 class="text-white font-semibold mb-4">Solutions</h4>
+                <ul class="space-y-3 text-sm text-slate-400">
+                    <li><a href="#solutions" class="hover:text-white transition-colors">VM Cloud</a></li>
+                    <li><a href="#solutions" class="hover:text-white transition-colors">Stockage S3</a></li>
+                    <li><a href="#solutions" class="hover:text-white transition-colors">PaaS</a></li>
+                    <li><a href="#solutions" class="hover:text-white transition-colors">Cybersécurité</a></li>
+                    <li><a href="#solutions" class="hover:text-white transition-colors">Data & IA</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="text-white font-semibold mb-4">Entreprise</h4>
+                <ul class="space-y-3 text-sm text-slate-400">
+                    <li><a href="#apropos" class="hover:text-white transition-colors">À propos</a></li>
+                    <li><a href="#blog" class="hover:text-white transition-colors">Blog</a></li>
+                    <li><a href="#contact" class="hover:text-white transition-colors">Contact</a></li>
+                    <li><a href="#faq" class="hover:text-white transition-colors">FAQ</a></li>
+                    <li><a href="#tarification" class="hover:text-white transition-colors">Tarification</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="text-white font-semibold mb-4">Légal</h4>
+                <ul class="space-y-3 text-sm text-slate-400">
+                    <li><a href="#" class="hover:text-white transition-colors">Mentions légales</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Politique de confidentialité</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">CGU / CGV</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Politique de cookies</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">SLA</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="section-divider mt-12 mb-8"></div>
+        
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p class="text-sm text-slate-500">© 2026 TS Cloud Solutions. Tous droits réservés.</p>
+            <div class="flex items-center gap-4 text-sm text-slate-500">
+                <span>🇹🇳 Tunis, Tunisie</span>
+                <span>|</span>
+                <span>contact@tscloud.tn</span>
+                <span>|</span>
+                <span>+216 71 234 567</span>
+            </div>
+        </div>
+    </div>
 </footer>
 
 <script>
-  (function() {
-    // --- Chart: Revenue & EBITDA (trimestrial)
-    const ctxRev = document.getElementById('heroRevenueChart')?.getContext('2d');
-    if(ctxRev) new Chart(ctxRev, {
-      type: 'bar',
-      data: { labels: ['T1 2025', 'T2 2025', 'T3 2025', 'T4 2025'],
-        datasets: [
-          { label: 'Revenus (k€)', data: [25, 65, 145, 235], backgroundColor: '#1B4FD8', borderRadius: 8 },
-          { label: 'EBITDA (k€)', data: [-28, -8, 42, 118], type: 'line', borderColor: '#0E9F7E', backgroundColor: 'transparent', borderWidth: 3, tension: 0.3, fill: false, pointBackgroundColor: '#0E9F7E' }
-        ] },
-      options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'top' } } }
+// Mobile Menu
+const mobileToggle = document.getElementById('mobileToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+const mobileClose = document.getElementById('mobileClose');
+const mobileOverlay = document.getElementById('mobileOverlay');
+const mobileLinks = document.querySelectorAll('.mobile-link');
+
+function openMobileMenu() {
+    mobileMenu.classList.add('open');
+    mobileOverlay.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeMobileMenu() {
+    mobileMenu.classList.remove('open');
+    mobileOverlay.classList.add('hidden');
+    document.body.style.overflow = '';
+}
+
+mobileToggle.addEventListener('click', openMobileMenu);
+mobileClose.addEventListener('click', closeMobileMenu);
+mobileOverlay.addEventListener('click', closeMobileMenu);
+mobileLinks.forEach(link => link.addEventListener('click', closeMobileMenu));
+
+// Navbar scroll effect
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+        navbar.classList.add('nav-scrolled');
+    } else {
+        navbar.classList.remove('nav-scrolled');
+    }
+});
+
+// FAQ Toggle
+function toggleFaq(button) {
+    const answer = button.nextElementSibling;
+    const icon = button.querySelector('.faq-icon');
+    const isOpen = answer.classList.contains('open');
+    
+    // Close all
+    document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
+    document.querySelectorAll('.faq-icon').forEach(i => i.style.transform = 'rotate(0deg)');
+    
+    if (!isOpen) {
+        answer.classList.add('open');
+        icon.style.transform = 'rotate(180deg)';
+    }
+}
+
+// Billing Toggle
+let isAnnual = false;
+function toggleBilling() {
+    isAnnual = !isAnnual;
+    const dot = document.getElementById('billingDot');
+    const toggle = document.getElementById('billingToggle');
+    
+    if (isAnnual) {
+        dot.style.transform = 'translateX(28px)';
+        toggle.classList.add('bg-blue-600');
+        toggle.classList.remove('bg-slate-700');
+        document.querySelector('.price-starter').textContent = '23€';
+        document.querySelector('.price-business').textContent = '119€';
+    } else {
+        dot.style.transform = 'translateX(0)';
+        toggle.classList.remove('bg-blue-600');
+        toggle.classList.add('bg-slate-700');
+        document.querySelector('.price-starter').textContent = '29€';
+        document.querySelector('.price-business').textContent = '149€';
+    }
+}
+
+// Contact Form
+function handleContactSubmit(event) {
+    event.preventDefault();
+    const form = document.getElementById('contactForm');
+    const success = document.getElementById('contactSuccess');
+    form.style.display = 'none';
+    success.classList.remove('hidden');
+}
+
+// Counter Animation
+function animateCounters() {
+    const counters = document.querySelectorAll('.counter-value');
+    counters.forEach(counter => {
+        const target = parseInt(counter.getAttribute('data-target'));
+        if (!target) return;
+        const duration = 2000;
+        const start = performance.now();
+        
+        function update(currentTime) {
+            const elapsed = currentTime - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            counter.textContent = Math.round(target * eased);
+            if (progress < 1) {
+                requestAnimationFrame(update);
+            }
+        }
+        requestAnimationFrame(update);
     });
+}
 
-    // segment chart
-    const segCtx = document.getElementById('segmentChart')?.getContext('2d');
-    if(segCtx) new Chart(segCtx, {
-      type: 'bar',
-      data: { labels: ['PME', 'Startups', 'Agences Dev', 'Institutions'], datasets: [{ label: 'Nombre potentiel (milliers / unités)', data: [10.2, 0.32, 0.15, 0.05], backgroundColor: ['#0E9F7E','#1B4FD8','#D97706','#7C3AED'] }] },
-      options: { responsive: true, maintainAspectRatio: true, scales: { y: { ticks: { callback: v => v + 'K' } } } }
+// Intersection Observer for animations
+const observerOptions = { threshold: 0.2, rootMargin: '0px 0px -50px 0px' };
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+            if (entry.target.classList.contains('counter-section')) {
+                animateCounters();
+            }
+        }
     });
+}, observerOptions);
 
-    // revenue mix pie
-    const mixCtx = document.getElementById('revenueMixChart')?.getContext('2d');
-    if(mixCtx) new Chart(mixCtx, {
-      type: 'doughnut',
-      data: { labels: ['IaaS (VMs)', 'PaaS (App hosting)', 'Cybersécurité', 'Data & IA', 'Support & Services'], datasets: [{ data: [45, 25, 15, 10, 5], backgroundColor: ['#1B4FD8','#0E9F7E','#D97706','#7C3AED','#DC2626'], borderWidth: 0 }] },
-      options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+document.querySelectorAll('.glass-card, .stat-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+});
+
+// Stagger animation for cards
+document.querySelectorAll('.glass-card, .stat-card').forEach((el, index) => {
+    el.style.transitionDelay = `${(index % 6) * 0.1}s`;
+});
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            const offset = 80;
+            const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+            window.scrollTo({ top, behavior: 'smooth' });
+        }
     });
-
-    // funding doughnut
-    const fundCtx = document.getElementById('fundingChart')?.getContext('2d');
-    if(fundCtx) new Chart(fundCtx, {
-      type: 'doughnut',
-      data: { labels: ['Infrastructure (80k)', 'Marketing & Sales (70k)', 'Trésorerie (50k)'], datasets: [{ data: [80,70,50], backgroundColor: ['#1B4FD8','#0E9F7E','#D97706'], borderWidth: 0 }] },
-      options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-    });
-  })();
-
-  // Additional interactivity & alerts
-  document.getElementById('ctaMain')?.addEventListener('click', () => alert("🚀 Accès démo & inscription bêta : réservez votre place ! Notre équipe vous contactera sous 24h."));
-  document.getElementById('demoBtn')?.addEventListener('click', () => alert("📞 Démo privée : hello@tscloud.tn | Offre spéciale early-bird -10% sur 6 mois."));
-  document.getElementById('contactBtn')?.addEventListener('click', () => alert("📧 hello@tscloud.tn | Support commercial FR/AR disponible dès maintenant."));
-  document.getElementById('investBtn')?.addEventListener('click', () => alert("💼 Devenez partenaire stratégique : levée Série A 2026. Contact invest@tscloud.tn pour le dataroom."));
-
-  // dynamic counters simulation (smooth)
-  const counters = document.querySelectorAll('.stat-item h3');
-  counters.forEach(c => {
-    let final = c.innerText.replace('€', '').replace('K', '').replace('%', '');
-    if(final.includes('K')) final = parseFloat(final) * 1000;
-    else if(final.includes('€')) final = parseFloat(final);
-    else final = parseFloat(final);
-    if(isNaN(final)) return;
-  });
+});
 </script>
-
-<!-- additional style for progress bar -->
-<style>
-  .progress-bar { background: #E4E7EF; border-radius: 12px; height: 8px; margin: 8px 0; width: 100%; }
-  .badge { background: #EBF0FF; display: inline-block; margin-right: 6px; padding: 4px 10px; border-radius: 40px; font-size: 0.7rem; font-weight: 500;}
-  .text-sm { font-size: 0.8rem; }
-  .text-center { text-align: center; }
-  canvas { max-height: 100%; }
-</style>
 </body>
 </html>
+
